@@ -7,7 +7,7 @@ class Passwords():
     def __init__(self):
         self.users_id_list, self.users_pass_list = [], []
         self.numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-        self.special_symbols = ["!", "@", "#", "%",
+        self.special_characters = ["!", "@", "#", "%",
                                 "$", "^", "&", "*", "?", "-", "_", ".", "~"]
 
     def open_csv_file(self):
@@ -15,40 +15,40 @@ class Passwords():
             reader = csv.reader(file)
             for row in reader:
                 if len(row) > 0:
-                    txt_row = "".join(str(i) for i in row)
-                    txt_user_id = txt_row.split(": ")[0]
-                    self.users_id_list.append(txt_user_id)
-                    txt_pass_id = txt_row.split(": ")[1]
-                    self.users_pass_list.append(txt_pass_id)
+                    user_data = "".join(str(i) for i in row)
+                    user_id = user_data.split(": ")[0]
+                    self.users_id_list.append(user_id)
+                    user_pass = user_data.split(": ")[1]
+                    self.users_pass_list.append(user_pass)
 
     def write_csv_file(self):
         with open("users_id_database.csv", "w", newline="") as file:
             writer = csv.writer(file)
             for i in range(0, len(self.users_id_list)):
-                txt_user_data = f"{self.users_id_list[i]}: {self.users_pass_list[i]}"
-                writer.writerow([txt_user_data])
+                user_data = f"{self.users_id_list[i]}: {self.users_pass_list[i]}"
+                writer.writerow([user_data])
 
     def show_header(self):
-        underscore = ""
+        underline = ""
         for i in range(0, 15):
-            underscore += "_"
-        print(f"\n{underscore}MENU:{underscore}\n\n1. CREATE A NEW USER ID\n2. CHANGE A PASSWORD\n3. DISPLAY ALL USERS ID\n4. QUIT\n")
+            underline += "_"
+        print(f"\n{underline}MENU:{underline}\n\n1. CREATE A NEW USER ID\n2. CHANGE A PASSWORD\n3. DISPLAY USERS ID DATABASE\n4. QUIT\n")
 
     def check_pass(self, new_user_pass_input):
-        check_num_list, check_sp_char_list = [], []
+        check_numbers_list, check_special_characters_list = [], []
         for i in new_user_pass_input:
-            if i not in self.numbers and i not in self.special_symbols:
-                check_num_list.append("False")
-                check_sp_char_list.append("False")
+            if i not in self.numbers and i not in self.special_characters:
+                check_numbers_list.append("False")
+                check_special_characters_list.append("False")
             elif i in self.numbers:
-                check_num_list.append("True")
+                check_numbers_list.append("True")
             else:
-                check_sp_char_list.append("True")
+                check_special_characters_list.append("True")
 
-        if "True" not in check_num_list:
+        if "True" not in check_numbers_list:
             print("YOUR PASSWORD SHOULD INCLUDE NUMBERS! TRY AGAIN!")
             self.create_pass()
-        elif "True" not in check_sp_char_list:
+        elif "True" not in check_special_characters_list:
             print("YOUR PASSWORD SHOULD INCLUDE SPECIAL CHARACTERS! TRY AGAIN!")
             self.create_pass()
         else:
@@ -82,30 +82,30 @@ class Passwords():
 
     def change_user_pass(self):
         self.user_id_index, self.user_pass_index = 0, 0
-        self.user_id_check = input("ENTER YOUR USER ID: ")
-        if self.user_id_check not in self.users_id_list:
+        self.user_id_input_check = input("ENTER YOUR USER ID: ")
+        if self.user_id_input_check not in self.users_id_list:
             print("USER ID WRONG!")
         else:
-            self.user_pass_check = input("ENTER YOUR PASSWORD: ")
-            if self.user_pass_check not in self.users_pass_list:
+            self.user_pass_input_check = input("ENTER YOUR PASSWORD: ")
+            if self.user_pass_input_check not in self.users_pass_list:
                 print("PASSWORD WRONG!")
             else:
                 self.user_id_index = self.users_id_list.index(
-                    self.user_id_check)
+                    self.user_id_input_check)
                 self.user_pass_index = self.users_pass_list.index(
-                    self.user_pass_check)
+                    self.user_pass_input_check)
                 if self.user_id_index == self.user_pass_index:
                     self.create_pass()
-                    self.users_id_list.remove(self.user_id_check)
-                    self.users_pass_list.remove(self.user_pass_check)
-                    self.users_id_list.append(self.user_id_check)
+                    self.users_id_list.remove(self.user_id_input_check)
+                    self.users_pass_list.remove(self.user_pass_input_check)
+                    self.users_id_list.append(self.user_id_input_check)
                     self.write_csv_file()
                 else:
                     print("PASSWORD WRONG!")
 
-    def display_all_users_id(self):
+    def show_users_id_database(self):
         if len(self.users_id_list) > 0:
-            print("\nUSERS IDS DATABASE:")
+            print("\nUSERS ID DATABASE:")
             for i in range(0, len(self.users_id_list)):
                 print(f"{i+1}. {self.users_id_list[i]}")
         else:
@@ -114,7 +114,7 @@ class Passwords():
     def quit_menu(self):
         print("DATABASE CLOSED!")
 
-    def main(self):
+    def show_main_menu(self):
         self.open_csv_file()
         in_main_menu = True
         while in_main_menu == True:
@@ -125,7 +125,7 @@ class Passwords():
             elif option == "2":
                 self.change_user_pass()
             elif option == "3":
-                self.display_all_users_id()
+                self.show_users_id_database()
             elif option == "4":
                 self.quit_menu()
                 in_main_menu = False
@@ -134,4 +134,4 @@ class Passwords():
 
 
 if __name__ == "__main__":
-    Passwords().main()
+    Passwords().show_main_menu()
