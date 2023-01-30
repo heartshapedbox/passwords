@@ -1,13 +1,32 @@
 import csv
+import os
+os.chdir("C:\\Users\\Dima\\Documents\\GitHub\\passwords\\")
 
 
 class Passwords():
     def __init__(self):
-        self.users_id_list = []
-        self.users_pass_list = []
+        self.users_id_list, self.users_pass_list = [], []
         self.numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
         self.special_symbols = ["!", "@", "#", "%",
                                 "$", "^", "&", "*", "?", "-", "_", ".", "~"]
+
+    def open_csv_file(self):
+        with open("users_id_database.csv", "r", newline="") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if len(row) > 0:
+                    txt_row = "".join(str(i) for i in row)
+                    txt_user_id = txt_row.split(": ")[0]
+                    self.users_id_list.append(txt_user_id)
+                    txt_pass_id = txt_row.split(": ")[1]
+                    self.users_pass_list.append(txt_pass_id)
+
+    def write_csv_file(self):
+        with open("users_id_database.csv", "w", newline="") as file:
+            writer = csv.writer(file)
+            for i in range(0, len(self.users_id_list)):
+                txt_user_data = f"{self.users_id_list[i]}: {self.users_pass_list[i]}"
+                writer.writerow([txt_user_data])
 
     def show_header(self):
         underscore = ""
@@ -59,6 +78,7 @@ class Passwords():
                 self.users_id_list.append(new_user_id_input)
                 new_user = True
                 self.create_pass()
+                self.write_csv_file()
 
     def change_user_pass(self):
         self.user_id_index, self.user_pass_index = 0, 0
@@ -79,19 +99,23 @@ class Passwords():
                     self.users_id_list.remove(self.user_id_check)
                     self.users_pass_list.remove(self.user_pass_check)
                     self.users_id_list.append(self.user_id_check)
-                    print("DONE! PASSWORD CHANGED!")
+                    self.write_csv_file()
                 else:
                     print("PASSWORD WRONG!")
 
     def display_all_users_id(self):
-        print("\nALL USERS ID LIST:")
-        for i in range(0, len(self.users_id_list)):
-            print(f"{i+1}. {self.users_id_list[i]}")
+        if len(self.users_id_list) > 0:
+            print("\nUSERS IDS DATABASE:")
+            for i in range(0, len(self.users_id_list)):
+                print(f"{i+1}. {self.users_id_list[i]}")
+        else:
+            print("DATABASE IS EMPTY!")
 
     def quit_menu(self):
-        print("PROGRAM CLOSED!")
+        print("DATABASE CLOSED!")
 
     def main(self):
+        self.open_csv_file()
         in_main_menu = True
         while in_main_menu == True:
             self.show_header()
