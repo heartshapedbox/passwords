@@ -8,7 +8,7 @@ class Passwords():
         self.users_id_list, self.users_pass_list = [], []
         self.numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
         self.special_characters = ["!", "@", "#", "%",
-                                "$", "^", "&", "*", "?", "-", "_", ".", "~"]
+                                   "$", "^", "&", "*", "?", "-", "_", ".", "~"]
 
     def open_csv_file(self):
         with open("users_id_database.csv", "r", newline="") as file:
