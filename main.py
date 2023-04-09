@@ -1,6 +1,6 @@
 import csv
 import os
-os.chdir("C:\\Users\\Dima\\Documents\\GitHub\\passwords\\")
+os.chdir("C:\\Users\\Dmitry\\Documents\\GitHub\\passwords\\")
 
 
 class Passwords():
